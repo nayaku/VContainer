@@ -27,6 +27,7 @@ namespace VContainer.Internal
             InjectFields(instance, resolver, parameters);
             InjectProperties(instance, resolver, parameters);
             InjectMethods(instance, resolver, parameters);
+            InjectAware(instance);
         }
 
         public object CreateInstance(IObjectResolver resolver, IReadOnlyList<IInjectParameter> parameters)
@@ -118,6 +119,14 @@ namespace VContainer.Internal
                 {
                     CappedArrayPool<object>.Shared8Limit.Return(parameterValues);
                 }
+            }
+        }
+
+        void InjectAware(object obj)
+        {
+            if (obj is IInjectAware injectAware)
+            {
+                injectAware.InjectAware();
             }
         }
     }
